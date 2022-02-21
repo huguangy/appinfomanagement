@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="/developer/common/header"></div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>修改APP基础信息 <i class="fa fa-user"></i><small
+                        th:text="${session.SESSION_DEV_USER.getDevName()}"></small>
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <form class="form-horizontal form-label-left" th:action="@{/appInfo/appmodify}" method="post">
+                    <input type="hidden" name="id" id="id" th:value="${appInfo.getId()}">
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="softwareName">软件名称 <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="softwareName" class="form-control col-md-7 col-xs-12"
+                                   data-validate-length-range="20" data-validate-words="1"
+                                   th:value="${appInfo.getSoftwareName()}" name="softwareName" required="required"
+                                   placeholder="请输入软件名称" type="text">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="APKName">APK名称 <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="APKName" type="text" class="form-control col-md-7 col-xs-12"
+                                   th:value="${appInfo.getApkName()}"
+                                   name="apkName" readonly="readonly">
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="supportROM">支持ROM <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="supportROM" class="form-control col-md-7 col-xs-12"
+                                   name="supportROM" required="required" th:value="${appInfo.getSupportROM()}"
+                                   data-validate-length-range="20" data-validate-words="1"
+                                   placeholder="请输入支持的ROM" type="text">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="interfaceLanguage">界面语言 <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="interfaceLanguage" class="form-control col-md-7 col-xs-12"
+                                   th:value="${appInfo.getInterfaceLanguage()}"
+                                   data-validate-length-range="20" data-validate-words="1" required="required"
+                                   name="interfaceLanguage" placeholder="请输入软件支持的界面语言" type="text">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="softwareSize">软件大小 <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="number" id="softwareSize" name="softwareSize" required="required"
+                                   th:value="${appInfo.getSoftwareSize()}"
+                                   data-validate-minmax="10,500" placeholder="请输入软件大小，单位为Mb"
+                                   class="form-control col-md-7 col-xs-12">
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="downloads">下载次数 <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="number" id="downloads" name="downloads" required="required"
+                                   th:value="${appInfo.getDownloads()}"
+                                   data-validate-minmax="10,500" placeholder="请输入下载次数"
+                                   class="form-control col-md-7 col-xs-12">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="flatformId">所属平台 <span
+                                class="required">*</span></label>
+                        <input type="hidden" th:value="${appInfo.getFlatformId()}" id="appinfoFormId"/>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select name="flatformId" id="flatformId" class="form-control" required="required">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="queryCategoryLevel1">一级分类 <span
+                                class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="hidden" id="category1hidden" th:value="${appInfo.getCategoryA().getId()}">
+
+                            <select name="categoryLevel1" id="queryCategoryLevel1" class="form-control" required="required">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="queryCategoryLevel2">二级分类 <span
+                                class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                            <input type="hidden" id="category2hidden" th:value="${appInfo.getCategoryB().getId()}">
+                            <select name="categoryLevel2" id="queryCategoryLevel2" class="form-control" required="required">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="queryCategoryLevel3">三级分类 <span
+                                class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="hidden" id="category3hidden" th:value="${appInfo.getCategoryC().getId()}">
+                            <select name="categoryLevel3" id="queryCategoryLevel3" class="form-control" required="required">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="statusName">APP状态 <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="statusName" type="text" class="form-control col-md-7 col-xs-12"
+                                   th:value="${appInfo.getAppStatus().getValueName()}"
+                                   name="statusName" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="appInfo">应用简介 <span
+                                class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+              <textarea id="appInfo" name="appInfo" required="required" th:text="${appInfo.getAppInfo()}"
+                        placeholder="请输入本软件的相关信息，本信息作为软件的详细信息进行软件的介绍。" class="form-control col-md-7 col-xs-12">
+              </textarea>
+                        </div>
+                    </div>
+                    <!--   <div class="item form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="attach">LOGO图片 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div id="uploadfile" style="display: none">
+                              <input id="attach"  type="file" class="form-control col-md-7 col-xs-12" name="attach">
+                              <p><span style="color:red;font-weight: bold;">*注：1、大小不得超过500k.2、图片格式：jpg、png、jpeg、pneg</span></p>
+                            </div>
+                            <div id="logoFile"></div>
+                        </div>
+                      </div>-->
+                    <div class="form-group">
+                        <div class="col-md-6 col-md-offset-3">
+                            <!--
+                                        <button type="submit" name="status" value="1" class="btn btn-success">保存并再次提交审核</button>
+                            -->
+                            <button type="submit" class="btn btn-success">保存</button>
+                            <button type="button" class="btn btn-primary" id="back">返回</button>
+                            <br/><br/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="/developer/common/footer"></div>
+
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        var ctxPath = /*[[@{/}]]*/'';
+        $.ajax({
+            type: "post",//请求类型
+            url: ctxPath + "dictionary/queryDictionary",//请求的url
+            data: {typeCode: 'APP_FLATFORM'},//请求参数
+            dataType: "json",//ajax接口（请求url）返回的数据类型
+            success: function (data) {//data：返回数据（json对象）
+                $("#flatformId option").remove();
+                var newHtml = "";
+                $.each(data, function (index, value) {
+                    newHtml += "<option  ";
+                    if(value.valueId == parseInt($("#appinfoFormId").val())){
+                        newHtml +=  " selected ";
+                    }
+                    newHtml += "  value='" + value.valueId + "'>" + value.valueName + "</option>";
+                });
+                $("#flatformId").append(newHtml);
+            },
+            error: function (data) {//当访问时候，404，500 等非200的错误状态码
+                alert("加载失败！" + data);
+            }
+        });
+        queryCategory("queryCategoryLevel1", null,$("#category1hidden").val());
+        queryCategory("queryCategoryLevel2", $("#category1hidden").val(),$("#category2hidden").val());
+        queryCategory("queryCategoryLevel3", $("#category2hidden").val(),$("#category3hidden").val());
+
+        // 绑定下拉框  选中结束 的事件
+        $("#queryCategoryLevel1").change(function () {
+            if($(this).val()!=''){
+                queryCategory("queryCategoryLevel2", $(this).val(),$("#category2hidden").val());
+            }
+        });
+        $("#queryCategoryLevel2").change(function () {
+            if($(this).val()!=''){
+                queryCategory("queryCategoryLevel3", $(this).val(),$("#category3hidden").val());
+            }
+        });
+    });
+
+    function queryCategory(level1, parentId,selectedid) {
+        var ctxPath = /*[[@{/}]]*/'';
+        $.ajax({
+            type: "post",//请求类型
+            url: ctxPath + "category/queryCategoryList",//请求的url
+            data: {parentId: parentId},//请求参数
+            dataType: "json",//ajax接口（请求url）返回的数据类型
+            success: function (data) {//data：返回数据（json对象）
+                $("#" + level1 + " option").remove();
+                $.each(data, function (index, value) {
+                    $("#" + level1).append("<option "+(value.id==parseInt(selectedid)?' selected ':'')+"value='" + value.id + "'>" + value.categoryName + "</option>");
+                });
+            },
+            error: function (data) {//当访问时候，404，500 等非200的错误状态码
+                alert("加载失败！" + data);
+            }
+        });
+    }
+
+
+
+
+
+    function funA(selectId, hiddenId) {
+        var str = $("#" + hiddenId).val();
+
+        $("#" + selectId + " option").each(function () {
+            if ($(this).val() == str) {
+                $(this).attr("selected", "selected");
+            }
+        });
+
+    }
+
+</script>

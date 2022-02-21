@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="/developer/common/header"></div>
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>查看APP信息 <i class="fa fa-user"></i><small  th:text="${session.SESSION_DEV_USER.getDevName()}"></small></h2>
+             <div class="clearfix"></div>
+      </div>
+      <div class="x_title">
+            <h2>APP基础信息</h2>
+          <div class="clearfix"></div>
+      </div>
+      <div class="x_content1" >
+        <form class="form-horizontal form-label-left" >
+          <input type="hidden" name="id" value="${appInfo.id}">
+          <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" >软件名称 <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input class="form-control col-md-7 col-xs-12" th:value="${appInfo.getSoftwareName()}" type="text" readonly="readonly">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" >APK名称 <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" class="form-control col-md-7 col-xs-12" th:value="${appInfo.getApkName()}" readonly="readonly">
+            </div>
+          </div>
+
+          <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" >支持ROM <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input class="form-control col-md-7 col-xs-12" th:value="${appInfo.getSupportROM()}"
+              	 type="text" readonly="readonly">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" >界面语言 <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input class="form-control col-md-7 col-xs-12" readonly="readonly" th:value="${appInfo.getInterfaceLanguage()}"
+              	type="text">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" >软件大小 <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" th:value="${appInfo.getSoftwareSize()}" class="form-control col-md-7 col-xs-12" readonly="readonly">
+            </div>
+          </div>
+
+          <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" >下载次数 <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" th:value="${appInfo.getDownloads()}"
+               class="form-control col-md-7 col-xs-12" readonly="readonly">
+            </div>
+          </div>
+
+          <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12"  >所属平台 <span class="required">*</span></label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" class="form-control col-md-7 col-xs-12" th:value="${appInfo.getFlatform().getValueName()}"  readonly="readonly">
+
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" >所属分类 <span class="required">*</span></label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" class="form-control col-md-7 col-xs-12" th:value="${appInfo.getCategoryA().getCategoryName()}+${appInfo.getCategoryB().getCategoryName()}+${appInfo.getCategoryC().getCategoryName()}"
+               readonly="readonly">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" >APP状态 <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+            	<input type="text" class="form-control col-md-7 col-xs-12" th:value="${appInfo.getAppStatus().getTypeName()}"
+             readonly="readonly">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" >应用简介 <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <textarea class="form-control col-md-7 col-xs-12" readonly="readonly"  th:text="${appInfo.getAppInfo()}">
+              </textarea>
+            </div>
+          </div>
+        </form>
+        </div>
+        <div class="clearfix"></div>
+        <div class="x_title">
+            <h2>历史版本列表</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content" style="display: block;">
+         <br>
+        <div id="datatable-responsive_wrapper"
+			class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+			<div class="row">
+				<div class="col-sm-12">
+					<table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
+						cellspacing="0" width="100%" role="grid" aria-describedby="datatable-responsive_info" style="width: 100%;">
+						<thead>
+							<tr role="row">
+								<th class="sorting_asc" tabindex="0"
+									aria-controls="datatable-responsive" rowspan="1" colspan="1"
+									style="width: 70px;" aria-label="First name: activate to sort column descending"
+									aria-sort="ascending">软件名称</th>
+								<th class="sorting" tabindex="0"
+									aria-controls="datatable-responsive" rowspan="1" colspan="1"
+									style="width: 10px;"
+									aria-label="Last name: activate to sort column ascending">
+									版本号</th>
+								<th class="sorting" tabindex="0"
+									aria-controls="datatable-responsive" rowspan="1" colspan="1"
+									style="width: 90px;"
+									aria-label="Last name: activate to sort column ascending">
+									版本大小(单位:M)</th>
+								<th class="sorting" tabindex="0"
+									aria-controls="datatable-responsive" rowspan="1" colspan="1"
+									style="width: 50px;"
+									aria-label="Last name: activate to sort column ascending">
+									发布状态</th>
+								<th class="sorting" tabindex="0"
+									aria-controls="datatable-responsive" rowspan="1" colspan="1"
+									style="width: 50px;"
+									aria-label="Last name: activate to sort column ascending">
+									APK文件下载</th>
+								<th class="sorting" tabindex="0"
+									aria-controls="datatable-responsive" rowspan="1" colspan="1"
+									style="width: 50px;"
+									aria-label="Last name: activate to sort column ascending">
+									最新更新时间</th>
+							</tr>
+						</thead>
+						<tbody th:each="appVersion:${versionList}">
+								<tr role="row" class="odd">
+									<td tabindex="0" class="sorting_1" th:text="${appInfo.getSoftwareName()}"></td>
+									<td th:text="${appVersion.getVersionNo()}"></td>
+									<td th:text="${appVersion.getVersionSize()}"></td>
+
+									<td th:text="${appVersion.getDataPublishStatus().valueName}"></td>
+									<td><a href="#" th:text="${appVersion.getApkFileName()}"></a></td>
+									<td th:text="${appVersion.getCreationDate()}"></td>
+								</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+      </div>
+    </div>
+     <div class="form-group">
+        <div class="col-md-6 col-md-offset-3">
+          <button type="button" class="btn btn-primary" id="back">返回</button>
+        </div>
+      </div>
+    <div class="clearfix"></div>
+    <br/><br/>
+  </div>
+</div>
+    <div th:replace="/developer/common/footer"></div>

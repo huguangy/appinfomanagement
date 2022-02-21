@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="/backend/common/header"></div>
+<div class="page-title">
+	<div class="title_left">
+		<h3>
+			<h3>
+			欢迎你：<label th:text="${session.SESSION_BACKEND_USER.getUserName() }"></label> <strong> | 角色：<label th:text="${session.SESSION_BACKEND_USER.dictionary.getValueName() }"></label></strong>
+			</h3>
+		</h3>
+	</div>
+</div>
+<div class="clearfix"></div>
+<div th:replace="/backend/common/footer"></div>
+
+     

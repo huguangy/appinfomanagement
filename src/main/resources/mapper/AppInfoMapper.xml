@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xk.mapper.AppInfoMapper">
+
+    <resultMap id="newAppInfo" type="com.xk.pojo.AppInfo">
+        <id property="id" column="id"/>
+        <result property="softwareName" column="softwareName"/>
+        <result property="apkName" column="APKName"/>
+        <result property="supportROM" column="supportROM"/>
+        <result property="interfaceLanguage" column="interfaceLanguage"/>
+        <result property="softwareSize" column="softwareSize"/>
+<!--        <result property="updateDate" column="updateDate"/>-->
+        <result property="devId" column="devId"/>
+        <result property="appInfo" column="appInfo"/>
+        <result property="status" column="status"/>
+<!--        <result property="onSaleDate" column="onSaleDate"/>-->
+<!--        <result property="offSaleDate" column="offSaleDate"/>-->
+        <result property="flatformId" column="flatformId"/>
+        <result property="categoryLevel1" column="categoryLevel1"/>
+        <result property="categoryLevel2" column="categoryLevel2"/>
+        <result property="categoryLevel3" column="categoryLevel3"/>
+        <result property="downloads" column="downloads"/>
+<!--        <result property="createdBy" column="createdBy"/>-->
+<!--        <result property="creationDate" column="creationDate"/>-->
+<!--        <result property="modifyBy" column="modifyBy"/>-->
+<!--        <result property="modifyDate" column="modifyDate"/>-->
+        <result property="logoPicPath" column="logoPicPath"/>
+        <result property="logoLocPath" column="logoLocPath"/>
+        <result property="versionId" column="versionId"/>
+        <association property="flatform" javaType="com.xk.pojo.DataDictionary">
+            <id property="valueId" column="flatformId"/>
+            <result property="valueName" column="flatformName"/>
+        </association>
+        <association property="appStatus" javaType="com.xk.pojo.DataDictionary">
+            <id property="valueId" column="status"/>
+            <result property="valueName" column="statusName"/>
+        </association>
+        <association property="categoryA" javaType="com.xk.pojo.AppCategory">
+            <id property="id" column="categoryLevel1"/>
+            <result property="categoryName" column="categoryAName"/>
+        </association>
+        <association property="categoryB" javaType="com.xk.pojo.AppCategory">
+            <id property="id" column="categoryLevel2"/>
+            <result property="categoryName" column="categoryBName"/>
+        </association>
+        <association property="categoryC" javaType="com.xk.pojo.AppCategory">
+            <id property="id" column="categoryLevel3"/>
+            <result property="categoryName" column="categoryCName"/>
+        </association>
+        <association property="appVersion" javaType="com.xk.pojo.AppVersion">
+            <id property="id" column="versionId"/>
+            <result property="versionNo" column="versionNo"/>
+        </association>
+    </resultMap>
+
+
+    <select id="queryAppInfoList" resultMap="newAppInfo" parameterType="map">
+        SELECT app_info.* ,
+               flatform.valueName flatformName,
+                appVersion.versionNo,
+               appStatus.valueName statusName,
+               categoryA.categoryName categoryAName,
+               categoryB.categoryName categoryBName,
+               categoryC.categoryName categoryCName
+        FROM app_info
+                 JOIN data_dictionary flatform
+                      ON app_info.flatformId=flatform.valueId
+                 JOIN data_dictionary appStatus
+                      ON app_info.`status`=appStatus.valueId
+                 JOIN app_category categoryA
+                      ON app_info.categoryLevel1=categoryA.id
+                 JOIN app_category categoryB
+                      ON app_info.categoryLevel2=categoryB.id
+                 JOIN app_category categoryC
+                      ON app_info.categoryLevel3=categoryC.id
+                left JOIN app_version appVersion
+                ON app_info.versionId=appVersion.id
+        <where>
+            flatform.typeCode = 'APP_FLATFORM'
+            AND appStatus.typeCode='APP_STATUS'
+            <if test="id!=null and id!=0">
+                AND app_info.id=#{id}
+            </if>
+            <if test="softwareName!=null and softwareName!=''">
+                AND app_info.softwareName like concat('%',#{softwareName},'%')
+            </if>
+            <if test="flatformId!=null and flatformId!=0">
+                AND app_info.flatformId=#{flatformId}
+            </if>
+            <if test="categoryLevel1!=null and categoryLevel1!=0">
+                AND app_Info.categoryLevel1=#{categoryLevel1}
+            </if>
+            <if test="categoryLevel2!=null and categoryLevel2!=0">
+                AND app_Info.categoryLevel2=#{categoryLevel2}
+            </if>
+            <if test="categoryLevel3!=null and categoryLevel3!=0">
+                AND app_Info.categoryLevel3=#{categoryLevel3}
+            </if>
+            <if test="status!=null and status!=0">
+                AND app_Info.status=#{status}
+            </if>
+            <if test="devId!=null and devId!=0">
+                AND app_Info.devId=#{devId}
+            </if>
+        </where>
+        order by app_info.status,app_info.creationDate
+        <if test="pageNum!=null ">
+            LIMIT #{pageNum},#{pageSize}
+        </if>
+    </select>
+
+    <select id="queryAppInfoCount" resultType="int" parameterType="map">
+        SELECT count(1)
+        FROM app_info
+        JOIN data_dictionary flatform
+        ON app_info.flatformId=flatform.valueId
+        JOIN data_dictionary appStatus
+        ON app_info.status=appStatus.valueId
+        JOIN app_category categoryA
+        ON app_info.categoryLevel1=categoryA.id
+        JOIN app_category categoryB
+        ON app_info.categoryLevel2=categoryB.id
+        JOIN app_category categoryC
+        ON app_info.categoryLevel3=categoryC.id
+        left JOIN app_version appVersion
+        ON app_info.versionId=appVersion.id
+        <where>
+            flatform.typeCode = 'APP_FLATFORM'
+            AND appStatus.typeCode='APP_STATUS'
+            <if test="softwareName!=null and softwareName!=''">
+                AND app_info.softwareName like concat('%',#{softwareName},'%')
+            </if>
+            <if test="flatformId!=null and flatformId!=0">
+                AND app_info.flatformId=#{flatformId}
+            </if>
+            <if test="categoryLevel1!=null and categoryLevel1!=0">
+                AND app_Info.categoryLevel1=#{categoryLevel1}
+            </if>
+            <if test="categoryLevel2!=null and categoryLevel2!=0">
+                AND app_Info.categoryLevel2=#{categoryLevel2}
+            </if>
+            <if test="categoryLevel3!=null and categoryLevel3!=0">
+                AND app_Info.categoryLevel3=#{categoryLevel3}
+            </if>
+            <if test="status!=null and status!=0">
+                AND app_Info.status=#{status}
+            </if>
+            <if test="devId!=null and devId!=0">
+                AND app_Info.devId=#{devId}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateAppInfo" parameterType="com.xk.pojo.AppInfo">
+        UPDATE `app_info`
+        <set>
+            <if test="softwareName!=null and softwareName!=''">
+            `softwareName` =#{softwareName},
+            </if>
+            <if test="apkName!=null and apkName!=''">
+            `APKName` =#{apkName},
+            </if>
+            <if test="supportROM!=null and supportROM!=''">
+            `supportROM` =#{supportROM},
+            </if>
+            <if test="interfaceLanguage!=null and interfaceLanguage!=''">
+            `interfaceLanguage` =#{interfaceLanguage},
+            </if>
+            <if test="softwareSize!=null and softwareSize!=0">
+            `softwareSize` =#{softwareSize},
+            </if>
+            <if test="updateDate!=null and updateDate!=''">
+            `updateDate` =#{updateDate},
+            </if>
+            <if test="devId!=null and devId!=0">
+            `devId` =#{devId},
+            </if>
+            <if test="appInfo!=null and appInfo!=''">
+            `appInfo` =#{appInfo},
+            </if>
+            <if test="status!=null and status!=0">
+            `status` =#{status},
+            </if>
+            <if test="onSaleDate!=null and onSaleDate!=''">
+            `onSaleDate` =#{onSaleDate},
+            </if>
+            <if test="offSaleDate!=null and offSaleDate!=''">
+            `offSaleDate` =#{offSaleDate},
+            </if>
+            <if test="flatformId!=null and flatformId!=0">
+            `flatformId` =#{flatformId},
+            </if>
+            <if test="categoryLevel3!=null and categoryLevel3!=0">
+            `categoryLevel3` =#{categoryLevel3},
+            </if>
+            <if test="downloads!=null and downloads!=0">
+            `downloads` =#{downloads},
+            </if>
+            `modifyBy` =#{modifyBy} ,
+            `modifyDate` =now(),
+            <if test="categoryLevel1!=null and categoryLevel1!=0">
+            `categoryLevel1` =#{categoryLevel1} ,
+            </if>
+            <if test="categoryLevel2!=null and categoryLevel2!=0">
+            `categoryLevel2` =#{categoryLevel2} ,
+            </if>
+            <if test="logoPicPath!=null and logoPicPath!=''">
+            `logoPicPath` =#{logoPicPath} ,
+            </if>
+            <if test="logoLocPath!=null and logoLocPath!=''">
+            `logoLocPath` =#{logoLocPath} ,
+            </if>
+            <if test="versionId!=null and versionId!=0">
+            `versionId` =#{versionId}
+            </if>
+        </set>
+        WHERE
+            `id` = #{id};
+    </update>
+
+    <delete id="deleteAppinfo" parameterType="int">
+        DELETE FROM app_info WHERE id=#{id}
+    </delete>
+
+    <insert id="insertAppinfo" parameterType="com.xk.pojo.AppInfo">
+        INSERT INTO `app_info` (
+            `softwareName`,
+            `APKName`,
+            `supportROM`,
+            `interfaceLanguage`,
+            `softwareSize`,
+            `updateDate`,
+            `devId`,
+            `appInfo`,
+            `status`,
+            `onSaleDate`,
+            `offSaleDate`,
+            `flatformId`,
+            `categoryLevel3`,
+            `downloads`,
+            `createdBy`,
+            `creationDate`,
+            `modifyBy`,
+            `modifyDate`,
+            `categoryLevel1`,
+            `categoryLevel2`,
+            `logoPicPath`,
+            `logoLocPath`,
+            `versionId`
+        )
+        VALUES
+            (
+               #{softwareName} ,
+               #{apkName} ,
+               #{supportROM} ,
+               #{interfaceLanguage} ,
+               #{softwareSize} ,
+               #{updateDate} ,
+               1 ,
+               #{appInfo} ,
+               #{status} ,
+               #{onSaleDate} ,
+               #{offSaleDate} ,
+               #{flatformId} ,
+               #{categoryLevel3} ,
+               #{downloads} ,
+               #{createdBy} ,
+               now() ,
+               #{modifyBy} ,
+               #{modifyDate} ,
+               #{categoryLevel1} ,
+               #{categoryLevel2} ,
+               #{logoPicPath} ,
+               #{logoLocPath} ,
+               #{versionId}
+            );
+    </insert>
+</mapper>

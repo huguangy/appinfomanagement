@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="/developer/common/header"></div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>新增APP版本信息 <i class="fa fa-user"></i><small> </small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_title">
+                <h2>历史版本列表
+                    <button class="btn btn-success" id="versionAdd">新增版本</button>
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content1">
+                <div class="clearfix"></div>
+                <p class="text-muted font-13 m-b-30"></p>
+                <div id="datatable-responsive_wrapper"
+                     class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="datatable-responsive"
+                                   class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
+                                   cellspacing="0" width="100%" role="grid" aria-describedby="datatable-responsive_info"
+                                   style="width: 100%;">
+                                <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        style="width: 70px;" aria-label="First name: activate to sort column descending"
+                                        aria-sort="ascending">软件名称
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        style="width: 10px;"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        版本号
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        style="width: 90px;"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        版本大小(单位:M)
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        style="width: 50px;"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        发布状态
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        style="width: 50px;"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        APK文件下载
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        style="width: 50px;"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        最新更新时间
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        style="width: 50px;"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        操作
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="appVersion:${versionList}" role="row" class="odd">
+                                    <td tabindex="0" class="sorting_1" th:text="${appVersion.getSoftwareName()}"></td>
+                                    <td th:text="${appVersion.getVersionNo() }"></td>
+                                    <td th:text="${appVersion.getVersionSize() }"></td>
+                                    <td th:text="${appVersion.getDataPublishStatus().getValueName()}"></td>
+                                    <td>
+                                        <a th:href="'/appifo/appInfo/downloadFile?fimeName='+${appVersion.getApkFileName()}"
+                                           th:text="${appVersion.getApkFileName() }"></a>
+                                    </td>
+                                    <td th:text="${appVersion.getModifyDate()}"></td>
+                                    <td><a href="">删除</a>|<a
+                                            th:href="'javascript:updateVersion('+${appVersion.getId()}+')'">修改</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix addVersion"></div>
+                <div class="x_title addVersion">
+                    <h2>新增版本信息</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content addVersion" style="display: block;">
+                    <br>
+                    <form class="form-horizontal form-label-left" th:action="@{/appVersion/addVersion}" method="post"
+                          enctype="multipart/form-data">
+                        <input type="hidden" name="appId" th:value="${appid}"/>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="versionNo">版本号 <span
+                                    class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input id="versionNo" name="versionNo" class="form-control col-md-7 col-xs-12"
+                                       data-validate-length-range="20" data-validate-words="1"
+                                       placeholder="请输入版本号" type="text" required="required">
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="versionSize">版本大小 <span
+                                    class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="number" id="versionSize" name="versionSize" required="required"
+                                       data-validate-minmax="10,500" placeholder="请输入版本大小，单位为Mb"
+                                       class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="publishStatus">发布状态 <span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="hidden" name="publishStatus" id="publishStatus" value="3">预发布
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="versionInfo">版本简介 <span
+                                    class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+              <textarea id="versionInfo" name="versionInfo" required="required"
+                        placeholder="请输入本版本的相关信息，本信息作为该版本的详细信息进行版本介绍。"
+                        class="form-control col-md-7 col-xs-12"></textarea>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="downloadLink">apk文件 <span
+                                    class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="file" class="form-control col-md-7 col-xs-12" name="file" id="downloadLink"
+                                       required="required"/>
+                                <!-- ${fileUploadError }-->
+                            </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-3">
+                                <button type="submit" class="btn btn-success">保存</button>
+                                <button type="button" class="btn btn-primary">返回</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="clearfix updateVersion"></div>
+                <div class="x_title updateVersion">
+                    <h2>修改版本信息</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content updateVersion" style="display: block;">
+                    <br>
+                    <form class="form-horizontal form-label-left" th:action="@{/appVersion/updateVersion}" method="post"
+                          enctype="multipart/form-data">
+                        <input type="hidden" name="id" id="upId"/>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">版本号 <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="versionNo" id="upversionNo" class="form-control col-md-7 col-xs-12"
+                                       data-validate-length-range="20" data-validate-words="1"
+                                       placeholder="请输入版本号" type="text" required="required">
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="versionSize">版本大小 <span
+                                    class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="number" name="versionSize" id="upversionSize" required="required"
+                                       data-validate-minmax="10,500" placeholder="请输入版本大小，单位为Mb"
+                                       class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="publishStatus">发布状态 <span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="hidden"  id="uppublishStatus" value="1"><span id="statusValue"></span>
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="versionInfo">版本简介 <span
+                                    class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                        <textarea name="versionInfo" required="required" id="upversionInfo"
+                        placeholder="请输入本版本的相关信息，本信息作为该版本的详细信息进行版本介绍。"
+                        class="form-control col-md-7 col-xs-12"></textarea>
+                            </div>
+                        </div>
+                        <div class="item form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="downloadLink">apk文件 <span
+                                    class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="file" class="form-control col-md-7 col-xs-12" name="file"/>
+                                <!-- ${fileUploadError }-->
+                            </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-3">
+                                <button type="submit" class="btn btn-success">保存</button>
+                                <button type="button" class="btn btn-primary">返回</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="/developer/common/footer"></div>
+<script type="text/javascript">
+    $(function () {
+        $(".addVersion").hide();
+        $(".updateVersion").hide();
+        $("#versionAdd").click(function () {
+            $(".addVersion").show();
+            $(".updateVersion").hide();
+        });
+    });
+
+    function updateVersion(id) {
+
+
+        $(".addVersion").hide();
+        $(".updateVersion").show();
+        $.ajax({
+            type: "post",//请求类型
+            url: "/appinfo/appVersion/queryVersion",//请求的url
+            data: {id: id},//请求参数
+            dataType: "json",//ajax接口（请求url）返回的数据类型
+            success: function (data) {//data：返回数据（json对象）
+                $("#upId").val(data.id);
+                $("#upversionNo").val(data.versionNo);
+                $("#upversionSize").val(data.versionSize);
+                $("#uppublishStatus").val(data.publishStatus);
+                $("#statusValue").text(data.dataPublishStatus.valueName);
+                $("#upversionInfo").text(data.versionInfo);
+            },
+            error: function (data) {//当访问时候，404，500 等非200的错误状态码
+                alert("加载失败！" + data);
+            }
+        });
+
+    }
+
+</script>
+

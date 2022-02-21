@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="/developer/common/header"></div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>
+                    APP 信息管理维护 <i class="fa fa-user"></i><small>
+                    <span th:text="${session.SESSION_DEV_USER.getDevName() }"></span>- 您可以通过搜索或者其他的筛选项对APP的信息进行修改,删除等管理操作
+                </small>
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <form>
+                    <input type="hidden" name="pageIndex" value="1"/>
+                    <ul>
+                        <li>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">软件名称</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input id="querySoftwareName" name="querySoftwareName" type="text"
+                                           class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">APP状态</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select name="queryStatus" id="queryStatus" class="form-control">
+                                        <option value="0">--请选择--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">所属平台</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select name="queryFlatformId" id="queryFlatformId" class="form-control">
+                                        <option value="">--请选择--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">一级分类</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select id="queryCategoryLevel1" name="queryCategoryLevel1"
+                                            class="form-control">
+                                        <option value="">--请选择--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">二级分类</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="hidden" name="categorylevel2list"
+                                           id="categorylevel2list"/>
+                                    <select name="queryCategoryLevel2" id="queryCategoryLevel2"
+                                            class="form-control">
+                                        <option value="">--请选择--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">三级分类</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select name="queryCategoryLevel3" id="queryCategoryLevel3"
+                                            class="form-control">
+                                        <option value="">--请选择--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <button type="button"  id="app_but" class="btn btn-primary"> 查 &nbsp;&nbsp;&nbsp;&nbsp;询
+                            </button>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_content">
+                <p class="text-muted font-13 m-b-30"></p>
+                <div id="datatable-responsive_wrapper"
+                     class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <a th:href="@{/appInfo/appinfoadd.html}" class="btn btn-success btn-sm">新增APP基础信息</a>
+                            <table id="datatable-responsive"
+                                   class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed"
+                                   cellspacing="0" width="100%" role="grid"
+                                   aria-describedby="datatable-responsive_info" style="width: 100%;">
+                                <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        aria-label="First name: activate to sort column descending"
+                                        aria-sort="ascending">软件名称
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        APK名称
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        软件大小(单位:M)
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        所属平台
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        所属分类(一级分类、二级分类、三级分类)
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        状态
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        下载次数
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        最新版本号
+                                    </th>
+                                    <th class="sorting" tabindex="0"
+                                        aria-controls="datatable-responsive" rowspan="1" colspan="1"
+                                        style="width: 124px;"
+                                        aria-label="Last name: activate to sort column ascending">
+                                        操作
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody id="contentList">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="dataTables_info" id="datatable-responsive_info"
+                                 role="status" aria-live="polite">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="app_page">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="pageNum"/>
+<input type="hidden" id="devId" th:value="${session.SESSION_DEV_USER.getId() }"/>
+<div th:replace="/developer/common/footer"></div>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        var ctxPath = /*[[@{/}]]*/'';
+        queryAppList(1);
+        $("#app_but").click(function () {
+            queryAppList(1);
+        });
+
+        $.ajax({
+            type: "post",//请求类型
+            url: ctxPath + "dictionary/queryDictionary",//请求的url
+            data: {typeCode: 'APP_FLATFORM'},//请求参数
+            dataType: "json",//ajax接口（请求url）返回的数据类型
+            success: function (data) {//data：返回数据（json对象）
+                $("#queryFlatformId option").remove();
+                $("#queryFlatformId").append("<option value='0'>--请选择--</option>");
+                $.each(data, function (index, value) {
+                    $("#queryFlatformId").append("<option value='" + value.valueId + "'>" + value.valueName + "</option>");
+                });
+            },
+            error: function (data) {//当访问时候，404，500 等非200的错误状态码
+                alert("加载失败！" + data);
+            }
+        });
+
+        $.ajax({
+            type: "post",//请求类型
+            url: ctxPath + "dictionary/queryDictionary",//请求的url
+            data: {typeCode: 'APP_STATUS'},//请求参数
+            dataType: "json",//ajax接口（请求url）返回的数据类型
+            success: function (data) {//data：返回数据（json对象）
+                $("#queryStatus option").remove();
+                $("#queryStatus").append("<option value='0'>--请选择--</option>");
+                $.each(data, function (index, value) {
+                    $("#queryStatus").append("<option value='" + value.valueId + "'>" + value.valueName + "</option>");
+                });
+            },
+            error: function (data) {//当访问时候，404，500 等非200的错误状态码
+                alert("加载失败！" + data);
+            }
+        });
+
+
+        queryCategory("queryCategoryLevel1", null);
+        // 绑定下拉框  选中结束 的事件
+        $("#queryCategoryLevel1").change(function () {
+            if($(this).val()==''){
+                $("#queryCategoryLevel2,#queryCategoryLevel3").html("<option value=''>--请选择--</option>");
+            }else{
+                queryCategory("queryCategoryLevel2", $(this).val());
+            }
+        });
+        $("#queryCategoryLevel2").change(function () {
+            if($(this).val()==''){
+                $("#queryCategoryLevel3").html("<option value=''>--请选择--</option>");
+            }else{
+                queryCategory("queryCategoryLevel3", $(this).val());
+            }
+        });
+    });
+
+    function queryCategory(level1, parentId) {
+        var ctxPath = /*[[@{/}]]*/'';
+        $.ajax({
+            type: "post",//请求类型
+            url: ctxPath + "category/queryCategoryList",//请求的url
+            data: {parentId: parentId},//请求参数
+            dataType: "json",//ajax接口（请求url）返回的数据类型
+            success: function (data) {//data：返回数据（json对象）
+                $("#" + level1 + " option").remove();
+                $("#" + level1).append("<option value=''>--请选择--</option>");
+
+                $.each(data, function (index, value) {
+                    $("#" + level1).append("<option value='" + value.id + "'>" + value.categoryName + "</option>");
+                });
+            },
+            error: function (data) {//当访问时候，404，500 等非200的错误状态码
+                alert("加载失败！" + data);
+            }
+        });
+    }
+
+    function queryAppList(pageNum){
+        var ctxPath = /*[[@{/}]]*/'';
+
+        var querySoftwareName = $("#querySoftwareName").val();
+        var queryStatus = $("#queryStatus").val();
+        var queryFlatformId = $("#queryFlatformId").val();
+        var queryCategoryLevel1 = $("#queryCategoryLevel1").val();
+        var queryCategoryLevel2 = $("#queryCategoryLevel2").val();
+        var queryCategoryLevel3 = $("#queryCategoryLevel3").val();
+        var devid = $("#devId").val();
+        $.ajax({
+            type: "post",//请求类型
+            url: ctxPath+"appInfo/queryAppInfoList",//请求的url
+            data: {
+                softwareName:querySoftwareName,
+                status:queryStatus,
+                flatformId:queryFlatformId,
+                categoryLevel1:queryCategoryLevel1,
+                categoryLevel2:queryCategoryLevel2,
+                categoryLevel3:queryCategoryLevel3,
+                devId:devid,
+                pageNum:pageNum
+            },//请求参数
+            dataType: "json",//ajax接口（请求url）返回的数据类型
+            success: function (data) {//data：返回数据（json对象）
+                $("#contentList tr").remove();
+                $("#datatable-responsive_info").html("");
+                $("#app_page").html("");
+                $.each(data.list, function (index, appInfo) {
+                    var versionNo = appInfo.appVersion == null ? "暂无" : appInfo.appVersion.versionNo;
+                    var newhtml = "<tr role='row' className='odd'>" +
+                        "                        <td tabIndex='0' className='sorting_1'>"+appInfo.softwareName+"</td>" +
+                        "                        <td>"+appInfo.apkName+"</td>" +
+                        "                        <td>"+appInfo.softwareSize+"</td>" +
+                        "                        <td>"+appInfo.flatform.valueName+"</td>" +
+                        "                        <td>"+appInfo.categoryA.categoryName+" ->" +
+                        "                            "+appInfo.categoryB.categoryName+" ->" +
+                        "                            "+appInfo.categoryC.categoryName+"" +
+                        "                        </td>" +
+                        "                        <td><span>"+appInfo.appStatus.valueName+"</span>" +
+                        "                        </td>" +
+                        "                        <td>"+appInfo.downloads+"</td>" +
+                        "                        <td>"+versionNo+"</td>" +
+                        "                        <td><a href='javascript:update("+appInfo.id+",4)'>上架</a>|<a href='javascript:update("+appInfo.id+",5)'>下架</a>|<a href='"+ctxPath+"appVersion/appversionadd/"+appInfo.id+"'>版本</a>|<a href='"+ctxPath+"appInfo/appinfomodify.html?id="+appInfo.id+"'>修改</a>|<a href='"+ctxPath+"appInfo/appinfoview.html?id="+appInfo.id+"'>查看</a>|<a href='javascript:deleteApp("+appInfo.id+")'>删除</a></td>" +
+                        "                    </tr>";
+                   $("#contentList").append(newhtml);
+                });
+                $("#pageNum").val(data.pageNum);
+                $("#datatable-responsive_info").append("共"+data.sumCount+"条记录"+data.pageNum+"/"+data.pageCount+"页");
+                if(data.pageCount>1){
+                    $("#app_page").append("     <a href=\"javascript:queryAppList(1);\">首页</a>\n" +
+                        "                <a href=\"javascript:queryAppList("+((data.pageNum-1)<1?1:(data.pageNum-1))+");\">上一页</a>\n" +
+                        "                <a href=\"javascript:queryAppList("+((data.pageNum+1)>data.pageCount?data.pageCount:(data.pageNum+1))+");\">下一页</a>\n" +
+                        "                <a href=\"javascript:queryAppList("+data.pageCount+");\">最后一页</a>");
+                }
+            },
+            error: function (data) {//当访问时候，404，500 等非200的错误状态码
+                alert("加载失败！" + data);
+            }
+        });
+    }
+
+
+
+    function deleteApp(id){
+        if(window.confirm("是否删除APP信息？？")){
+            var ctxPath = /*[[@{/}]]*/'';
+            $.ajax({
+                type: "post",//请求类型
+                url: ctxPath+"appInfo/deleteAppinfo",//请求的url
+                data: {id: id},//请求参数
+                dataType: "text",//ajax接口（请求url）返回的数据类型
+                success: function (data) {//data：返回数据（json对象）
+                    if(data == '1'){
+                        queryAppList($("#pageNum").val());
+                        alert("操作成功！");
+                    }
+                },
+                error: function (data) {//当访问时候，404，500 等非200的错误状态码
+                    alert("加载失败！" + data);
+                }
+            });
+        }
+    }
+
+    function update(id,status){
+        var msg = "";
+        if(status==4){
+            msg = "是否上架？"
+        }else{
+            msg = "是否下架？"
+        }
+        if(window.confirm(msg)){
+            var ctxPath = /*[[@{/}]]*/'';
+            $.ajax({
+                type: "post",//请求类型
+                url: ctxPath+"appInfo/updateAppStatus",//请求的url
+                data: {id: id,status:status},//请求参数
+                dataType: "json",//ajax接口（请求url）返回的数据类型
+                success: function (data) {//data：返回数据（json对象）
+                    if(data == '1'){
+                        alert("更新成功！");
+                        queryAppList($("#pageNum").val());
+                    }
+                },
+                error: function (data) {//当访问时候，404，500 等非200的错误状态码
+                    alert("加载失败！" + data);
+                }
+            });
+        }
+    }
+</script>
